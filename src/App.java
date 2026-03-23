@@ -34,29 +34,36 @@ public class App {
     static double nanoToMilli = 1.0/1_000_000;
 
     /**
-     * Código de teste 1. Este método...
+     * Código de teste 1. Este método percorre o vetor de 2 em 2 posições,
+     * somando o resultado de vetor[i] % 2.
+     * Complexidade: O(n) - linear.
+     * Operação relevante: vetor[i] % 2 (operação de módulo).
      * @param vetor Vetor com dados para teste.
-     * @return Uma resposta que significa....
+     * @return Soma dos restos da divisão por 2 dos elementos em posições pares.
      */
     static int codigo1(int[] vetor) {
         int resposta = 0;
         for (int i = 0; i < vetor.length; i += 2) {
             resposta += vetor[i]%2;
+            operacoes++;
         }
         return resposta;
     }
-    
 
     /**
-     * Código de teste 2. Este método...
+     * Código de teste 2. Este método possui um loop externo que divide k por 2
+     * a cada iteração, e um loop interno que conta de 0 até k.
+     * Complexidade: O(n log n).
+     * Operação relevante: contador++ (incremento no loop interno).
      * @param vetor Vetor com dados para teste.
-     * @return Uma resposta que significa....
+     * @return Valor do contador acumulado.
      */
     static int codigo2(int[] vetor) {
         int contador = 0;
         for (int k = (vetor.length - 1); k > 0; k /= 2) {
             for (int i = 0; i <= k; i++) {
                 contador++;
+                operacoes++;
             }
 
         }
@@ -64,13 +71,16 @@ public class App {
     }
 
     /**
-     * Código de teste 3. Este método...
+     * Código de teste 3. Selection Sort - ordena o vetor por seleção.
+     * Complexidade: O(n²) - quadrática.
+     * Operação relevante: comparação vetor[j] < vetor[menor].
      * @param vetor Vetor com dados para teste.
      */
     static void codigo3(int[] vetor) {
         for (int i = 0; i < vetor.length - 1; i++) {
             int menor = i;
             for (int j = i + 1; j < vetor.length; j++) {
+                operacoes++;
                 if (vetor[j] < vetor[menor])
                     menor = j;
             }
@@ -81,11 +91,14 @@ public class App {
     }
 
     /**
-     * Código de teste 4 (recursivo). Este método...
+     * Código de teste 4 (recursivo). Calcula Fibonacci de n recursivamente.
+     * Complexidade: O(2^n) - exponencial.
+     * Operação relevante: cada chamada recursiva (soma).
      * @param n Ponto inicial do algoritmo
-     * @return Um inteiro que significa...
+     * @return O n-ésimo número de Fibonacci.
      */
     static int codigo4(int n) {
+        operacoes++;
         if (n <= 2)
             return 1;
         else
@@ -93,7 +106,7 @@ public class App {
     }
 
     /**
-     * Gerador de vetores aleatórios de tamanho pré-definido.  commit teste
+     * Gerador de vetores aleatórios de tamanho pré-definido. 
      * @param tamanho Tamanho do vetor a ser criado.
      * @return Vetor com dados aleatórios, com valores entre 1 e (tamanho/2), desordenado.
      */
@@ -105,7 +118,85 @@ public class App {
         return vetor;
         
     }
+
     public static void main(String[] args) {
-        
+
+        // =============================================
+        // CODIGO 1 - Teste Grande (linear O(n))
+        // =============================================
+        System.out.println("========================================");
+        System.out.println("CODIGO 1 - Complexidade O(n)");
+        System.out.println("========================================");
+        System.out.printf("%-15s | %-20s | %-15s%n", "Tamanho (n)", "Operacoes", "Tempo (ms)");
+        System.out.println("-".repeat(55));
+
+        for (int tamanho : tamanhosTesteGrande) {
+            int[] vetor = gerarVetor(tamanho);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo1(vetor);
+            long fim = System.nanoTime();
+            double tempoMs = (fim - inicio) * nanoToMilli;
+            System.out.printf("%-15d | %-20d | %-15.2f%n", tamanho, operacoes, tempoMs);
+        }
+
+        // =============================================
+        // CODIGO 2 - Teste Grande (O(n log n))
+        // =============================================
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("CODIGO 2 - Complexidade O(n log n)");
+        System.out.println("========================================");
+        System.out.printf("%-15s | %-20s | %-15s%n", "Tamanho (n)", "Operacoes", "Tempo (ms)");
+        System.out.println("-".repeat(55));
+
+        for (int tamanho : tamanhosTesteGrande) {
+            int[] vetor = gerarVetor(tamanho);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo2(vetor);
+            long fim = System.nanoTime();
+            double tempoMs = (fim - inicio) * nanoToMilli;
+            System.out.printf("%-15d | %-20d | %-15.2f%n", tamanho, operacoes, tempoMs);
+        }
+
+        // =============================================
+        // CODIGO 3 - Teste Médio (Selection Sort O(n²))
+        // =============================================
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("CODIGO 3 - Complexidade O(n^2)");
+        System.out.println("========================================");
+        System.out.printf("%-15s | %-20s | %-15s%n", "Tamanho (n)", "Operacoes", "Tempo (ms)");
+        System.out.println("-".repeat(55));
+
+        for (int tamanho : tamanhosTesteMedio) {
+            int[] vetor = gerarVetor(tamanho);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo3(vetor);
+            long fim = System.nanoTime();
+            double tempoMs = (fim - inicio) * nanoToMilli;
+            System.out.printf("%-15d | %-20d | %-15.2f%n", tamanho, operacoes, tempoMs);
+        }
+
+        // =============================================
+        // CODIGO 4 - Teste Pequeno (Fibonacci O(2^n))
+        // =============================================
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("CODIGO 4 - Complexidade O(2^n)");
+        System.out.println("========================================");
+        System.out.printf("%-15s | %-20s | %-15s%n", "n", "Operacoes", "Tempo (ms)");
+        System.out.println("-".repeat(55));
+
+        for (int n : tamanhosTestePequeno) {
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo4(n);
+            long fim = System.nanoTime();
+            double tempoMs = (fim - inicio) * nanoToMilli;
+            System.out.printf("%-15d | %-20d | %-15.2f%n", n, operacoes, tempoMs);
+        }
     }
 }
